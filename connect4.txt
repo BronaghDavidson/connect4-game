@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Connect 4 Games</title>
+  <style>
+    /* CSS styles for the game board */
+    .board {
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .row {
+      display: flex;
+    }
+
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      border: 1px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Connect 4 Games</h1>
+
+
+  <h2>Scoreboard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Wins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Scoreboard rows -->
+      <% @scoreboard.each do |player, wins| %>
+        <tr>
+          <td><%= player %></td>
+          <td><%= wins %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+
+  <!-- Game boards -->
+  <% @game_boards.each do |game_board| %>
+    <h3>Game <%= game_board.id %></h3>
+    <div class="board">
+      <!-- Game board rows -->
+      <% game_board.state.each do |row| %>
+        <div class="row">
+          <!-- Game board cells -->
+          <% row.each do |cell| %>
+            <div class="cell"><%= cell || '-' %></div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+
+  <!-- New game form -->
+  <h1>New Connect 4 Game</h1>
+
+
+  <form action="/games" method="post">
+    <!-- Hidden fields for game state -->
+    <% (0..5).each do |row| %>
+      <% (0..6).each do |col| %>
+        <input type="hidden" name="state" value="<%= @game_board.state[row][col] || '' %>">
+      <% end %>
+    <% end %>
+
+
+    <div class="actions">
+      <input type="submit" value="Start Game">
+      <input type="submit" value="Start 2 Player Game" name="two_players">
+    </div>
+  </form>
+</body>
+</html>
